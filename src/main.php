@@ -44,11 +44,11 @@ class IFM {
 		// gui controls
 		"showlastmodified" => 0,
 		"showfilesize" => 1,
-		"showowner" => 1,
-		"showgroup" => 1,
-		"showpermissions" => 2,
+		"showowner" => 0,
+		"showgroup" => 0,
+		"showpermissions" => 0,
 		"showhtdocs" => 0,
-		"showhiddenfiles" => 1,
+		"showhiddenfiles" => 0,
 		"showpath" => 0,
 		"contextmenu" => 1
 	);
