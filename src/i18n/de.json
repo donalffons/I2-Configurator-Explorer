@@ -105,5 +105,8 @@
     "upload_remote": "Hochladen von ausserhalb",
     "upload_remote_url": "Entfernte URL zum hochladen",
     "username": "Benutzername",
-    "word_wrap": "Zeilenumbruch"
+    "word_wrap": "Zeilenumbruch",
+    "variantname": "Variantenname",
+    "duplicate": "Duplizieren",
+    "view": "Betrachten"
 }

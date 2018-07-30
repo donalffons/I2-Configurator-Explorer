@@ -105,5 +105,8 @@
     "upload_remote": "Remote Upload",
     "upload_remote_url": "Remote Upload URL",
     "username": "username",
-    "word_wrap": "Word Wrap"
+    "word_wrap": "Word Wrap",
+    "variantname": "Variant Name",
+    "duplicate": "duplicate",
+    "view": "view"
 }

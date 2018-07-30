@@ -16,13 +16,15 @@ function IFM( params ) {
 	this.currentDir = "";		// this is the global variable for the current directory; it is used for AJAX requests
 	this.rootElement = "";		// global root element, currently not used
 	this.fileCache = [];		// holds the current set of files
+	this.variantCache = [];		// holds the current set of variants
 	this.search = {};		// holds the last search query, as well as the search results
 
 	// This indicates if the modal was closed by a button or not, to prevent the user
 	// from accidentially close it while editing a file.
 	this.isModalClosedByButton = false;
 
-	this.datatable = null; // Reference for the data table
+	this.filedatatable = null; // Reference for the file data table
+	this.variantdatatable = null; // Reference for the variant  table
 
 	/**
 	 * Shows a bootstrap modal
@@ -90,6 +92,26 @@ function IFM( params ) {
 			},
 			dataType: "json",
 			success: self.rebuildFileTable,
+			error: function() { self.showMessage( self.i18n.general_error, "e" ); },
+			complete: function() { self.task_done( taskid ); }
+		});
+	};
+
+	/**
+	 * Refreshes the file table
+	 */
+	this.refreshVariantTable = function () {
+		var taskid = self.generateGuid();
+		self.task_add( { id: taskid, name: self.i18n.refresh } );
+		$.ajax({
+			url: self.api,
+			type: "POST",
+			data: {
+				api: "getVariants",
+				dir: self.currentDir
+			},
+			dataType: "json",
+			success: self.rebuildVariantTable,
 			error: function() { self.showMessage( self.i18n.general_error, "e" ); },
 			complete: function() { self.task_done( taskid ); }
 		});
@@ -198,8 +220,8 @@ function IFM( params ) {
 		filetable.append( document.createElement( 'tbody' ) );
 		filetable.tBodies[0].innerHTML = newTBody;
 
-		if( self.datatable ) self.datatable.destroy();
-		self.datatable = $('#filetable').DataTable({
+		if( self.filedatatable ) self.filedatatable.destroy();
+		self.filedatatable = $('#filetable').DataTable({
 			paging: false,
 			info: false,
 			autoWidth: false,
@@ -219,7 +241,7 @@ function IFM( params ) {
 				self.changePermissions( e.target.dataset.filename, e.target.value );
 		});
 		filetable.tBodies[0].addEventListener( 'click', function( e ) {
-			if( e.target.tagName == "TD" && e.target.parentElement.classList.contains( 'clickable-row' ) && e.target.parentElement.dataset.filename !== ".." && e.ctrlKey )
+			if( e.target.tagName == "TD" && e.target.parentElement.classList.contains( 'clickable-file-row' ) && e.target.parentElement.dataset.filename !== ".." && e.ctrlKey )
 				e.target.parentElement.classList.toggle( 'selectedItem' );
 			else if( e.target.classList.contains( 'ifmitem' ) || e.target.parentElement.classList.contains( 'ifmitem' ) ) {
 				e.stopPropagation();
@@ -278,7 +300,7 @@ function IFM( params ) {
 
 		if( self.config.contextmenu && !!( self.config.edit || self.config.extract || self.config.rename || self.config.copymove || self.config.download || self.config.delete ) ) {
 			// create the context menu, this also uses jquery, AFAIK
-			var contextMenu = new BootstrapMenu( '.clickable-row', {
+			var contextMenu = new BootstrapMenu( '.clickable-file-row', {
 				fetchElementData: function( row ) {
 					var data = {};
 					data.selected =
@@ -380,6 +402,253 @@ function IFM( params ) {
 								self.showDeleteDialog( data.selected );
 							else
 								self.showDeleteDialog( data.clicked );
+						},
+						iconClass: "icon icon-trash",
+						isShown: function( data ) { return !!( self.config.delete && data.clicked.name != ".." ); }
+					}
+				}
+			});
+		}
+	};
+
+	/**
+	 * Rebuilds the file table with fetched items
+	 *
+	 * @param object data - object with items
+	 */
+	this.rebuildVariantTable = function( data ) {
+		if( data.status == "ERROR" ) {
+			this.showMessage( data.message, "e" );
+			return;
+		}
+		data.forEach( function( item ) {
+			item.guid = self.generateGuid();
+			item.linkname = ( item.name == ".." ) ? "[ up ]" : item.name;
+			if( item.name == ".." )
+				item.fixtop = 100;
+			item.download = {};
+			item.download.name = ( item.name == ".." ) ? "." : item.name;
+			item.download.currentDir = self.currentDir;
+			if( self.config.isDocroot )
+				item.href = 'href=editor.html?model="'+self.currentDir+'"';
+			if( ! self.config.chmod )
+				item.readonly = "readonly";
+			if( self.config.edit || self.config.rename || self.config.delete || self.config.extract || self.config.copymove ) {
+				item.ftbuttons = true;
+				item.button = [];
+			}
+			if( item.type == "dir" ) {
+				if( self.config.download && self.config.zipnload ) {
+					item.download.action = "zipnload";
+					item.download.icon = "icon icon-download-cloud";
+				}
+				item.rowclasses = "isDir";
+			} else {
+				if( self.config.download && self.config.zipnload ) {
+					item.download.action = "download";
+					item.download.icon = "icon icon-download";
+				}
+				if( item.icon !== undefined && item.icon.indexOf( 'file-image' ) !== -1  ) {
+					item.tooltip = 'data-toggle="tooltip"';
+				}
+				if( self.config.extract && self.inArray( item.ext, ["zip","tar","tgz","tar.gz","tar.xz","tar.bz2"] ) ) {
+					item.eaction = "extract";
+					item.button.push({
+						action: "extract",
+						icon: "icon icon-archive",
+						title: "extract"
+					});
+				} else if(self.config.edit) {
+					item.eaction = "edit";
+					item.button.push({
+						action: "edit",
+						icon: "icon icon-pencil",
+						title: "edit"
+					});
+				}
+			}
+			if( ! self.inArray( item.name, [".", ".."] ) ) {
+				item.dragdrop = 'draggable="true"';
+				if( self.config.copymove )
+					item.button.push({
+						action: "copymove",
+						icon: "icon icon-folder-open-empty",
+						title: "copy/move"
+					});
+				if( self.config.rename )
+					item.button.push({
+						action: "rename",
+						icon: "icon icon-terminal",
+						title: "rename"
+					});
+				if( self.config.delete )
+					item.button.push({
+						action: "delete",
+						icon: "icon icon-trash",
+						title: "delete"
+					});
+			}
+		});
+
+		// save items to file cache
+		self.variantCache = data;
+
+
+		// build new tbody and replace the old one with the new
+		var newTBody = Mustache.render( self.templates.varianttable, { items: data, config: self.config, i18n: self.i18n, api: self.api } );
+		var filetable = document.getElementById( 'varianttable' );
+		filetable.tBodies[0].remove();
+		filetable.append( document.createElement( 'tbody' ) );
+		filetable.tBodies[0].innerHTML = newTBody;
+
+		if( self.variantdatatable ) self.variantdatatable.destroy();
+		self.variantdatatable = $('#varianttable').DataTable({
+			paging: false,
+			info: false,
+			autoWidth: false,
+			columnDefs: [
+				{ "orderable": false, "targets": ["th-download","th-permissions","th-buttons"] }
+			],
+			orderFixed: [0, 'desc'],
+			language: {
+				"search": self.i18n.filter
+			}
+		});
+
+
+		// add event listeners
+		filetable.tBodies[0].addEventListener( 'keypress', function( e ) {
+			if( e.target.name == 'newpermissions' && !!self.config.chmod && e.key == 'Enter' )
+				self.changePermissions( e.target.dataset.filename, e.target.value );
+		});
+		filetable.tBodies[0].addEventListener( 'click', function( e ) {
+			if( e.target.tagName == "TD" && e.target.parentElement.classList.contains( 'clickable-variant-row' ) && e.target.parentElement.dataset.filename !== ".." && e.ctrlKey )
+				e.target.parentElement.classList.toggle( 'selectedItem' );
+			else if( e.target.classList.contains( 'ifmitem' ) || e.target.parentElement.classList.contains( 'ifmitem' ) ) {
+				e.stopPropagation();
+				e.preventDefault();
+				ifmitem = ( e.target.classList.contains( 'ifmitem' ) ? e.target : e.target.parentElement );
+				if( ifmitem.dataset.type == "dir" )
+					self.changeDirectory( ifmitem.parentElement.parentElement.dataset.filename );
+				else
+					if( self.config.isDocroot )
+						window.location.href = self.hrefEncode( self.pathCombine( self.currentDir, ifmitem.parentElement.parentElement.dataset.filename ) );
+					else
+						document.forms["d_"+ifmitem.id].submit();
+			} else if( e.target.parentElement.name == 'start_download' ) {
+				e.stopPropagation();
+				e.preventDefault();
+				document.forms["d_"+e.target.parentElement.dataset.guid].submit();
+			} else if( e.target.parentElement.name && e.target.parentElement.name.substring(0, 3) == "do-" ) {
+				e.stopPropagation();
+				e.preventDefault();
+				var item = self.variantCache.find( function( x ) { if( x.guid === e.target.parentElement.dataset.id ) return x; } );
+				switch( e.target.parentElement.name.substr( 3 ) ) {
+					case "rename":
+						self.showRenameFileDialog( item.name );
+						break;
+					case "extract":
+						self.showExtractFileDialog( item.name );
+						break;
+					case "edit":
+						self.editFile( item.name );
+						break;
+					case "delete":
+						self.showDeleteDialog( item );
+						break;
+					case "copymove":
+						self.showCopyMoveDialog( item );
+						break;
+				}
+			}
+		});
+		// has to be jquery, since this is a bootstrap feature
+		$( 'a[data-toggle="tooltip"]' ).tooltip({
+			title: function() {
+				var item = self.variantCache.find( x => x.guid == $(this).attr('id') );
+				var tooltip = document.createElement( 'img' );
+				if( self.config.isDocroot )
+					tooltip.src = encodeURI( self.pathCombine( self.currentDir, item.name ) ).replace( '#', '%23' ).replace( '?', '%3F' );
+				else
+					tooltip.src = self.api + "?api=proxy&dir=" + encodeURIComponent( self.currentDir ) + "&filename=" + encodeURIComponent( item.name );
+				tooltip.classList.add( 'imgpreview' );
+				return tooltip;
+			},
+			animated: 'fade',
+			placement: 'right',
+			html: true
+		});
+
+		if( self.config.contextmenu && !!( self.config.edit || self.config.extract || self.config.rename || self.config.copymove || self.config.download || self.config.delete ) ) {
+			// create the context menu, this also uses jquery, AFAIK
+			var contextMenu = new BootstrapMenu( '.clickable-variant-row', {
+				fetchElementData: function( row ) {
+					var data = {};
+					data.selected =
+						Array.prototype.slice.call( document.getElementsByClassName( 'selectedItem' ) )
+						.map( function(e){ return self.variantCache.find( x => x.guid == e.children[0].children[0].id ); } );
+					data.clicked = self.variantCache.find( x => x.guid == row[0].children[0].children[0].id );
+					return data;
+				},
+				actionsGroups:[
+					['view'],
+					['edit', 'rename', 'duplicate'],
+					['delete']
+				],
+				actions: {
+					view: {
+						name: self.i18n.view,
+						onClick: function( data ) {
+							//self.editFile( data.clicked.name );
+							alert("TODO: implement viewing!");
+						},
+						iconClass: "icon icon-eye_open",
+						isShown: function( data ) {
+							return !!( self.config.edit && data.clicked.eaction == "edit" && !data.selected.length );
+						}
+					},
+					edit: {
+						name: self.i18n.edit,
+						onClick: function( data ) {
+							//self.editFile( data.clicked.name );
+							alert("TODO: implement editing!");
+						},
+						iconClass: "icon icon-pencil",
+						isShown: function( data ) {
+							return !!( self.config.edit && data.clicked.eaction == "edit" && !data.selected.length );
+						}
+					},
+					rename: {
+						name: self.i18n.rename,
+						onClick: function( data ) {
+							//self.showRenameFileDialog( data.clicked.name );
+							alert("TODO: implement renaming!");
+						},
+						iconClass: "icon icon-terminal",
+						isShown: function( data ) { return !!( self.config.rename && !data.selected.length && data.clicked.name != ".." ); }
+					},
+					duplicate: {
+						name: function( data ) {
+							if( data.selected.length > 0 )
+								return self.i18n.duplicate+' <span class="badge">'+data.selected.length+'</span>';
+							else
+								return self.i18n.duplicate;
+						},
+						onClick: function( data ) {
+							alert("TODO: implement duplication!");
+						},
+						iconClass: "icon icon-folder-empty",
+						isShown: function( data ) { return !!( self.config.copymove && data.clicked.name != ".." ); }
+					},
+					delete: {
+						name: function( data ) {
+							if( data.selected.length > 0 )
+								return self.i18n.delete+' <span class="badge">'+data.selected.length+'</span>';
+							else
+								return self.i18n.delete;
+						},
+						onClick: function( data ) {
+							alert("TODO: implement delete!");
 						},
 						iconClass: "icon icon-trash",
 						isShown: function( data ) { return !!( self.config.delete && data.clicked.name != ".." ); }
@@ -1846,6 +2115,7 @@ function IFM( params ) {
 		} else {
 			this.refreshFileTable();
 		}
+		this.refreshVariantTable();
 	};
 
 	this.init = function( id ) {

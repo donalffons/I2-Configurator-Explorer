@@ -166,6 +166,9 @@ f00bar;
 		$templates['uploadfile'] = <<<'f00bar'
 @@@file:src/templates/modal.uploadfile.html@@@
 f00bar;
+		$templates['varianttable'] = <<<'f00bar'
+@@@file:src/templates/varianttable.html@@@
+f00bar;
 		$this->templates = $templates;
 
 		$i18n = array();
@@ -255,6 +258,12 @@ f00bar;
 				$this->getFiles( $_REQUEST["dir"] );
 			else
 				$this->getFiles( "" );
+		}
+		elseif( $_REQUEST["api"] == "getVariants" ) {
+			if( isset( $_REQUEST["dir"] ) && $this->isPathValid( $_REQUEST["dir"] ) )
+				$this->getVariants( $_REQUEST["dir"] );
+			else
+				$this->getVariants( "" );
 		}
 		elseif( $_REQUEST["api"] == "getConfig" ) {
 			$this->getConfig();
@@ -347,6 +356,25 @@ f00bar;
 		usort( $files, array( $this, "sortByName" ) );
 
 		$this->jsonResponse( array_merge( $dirs, $files ) );
+	}
+
+	private function getVariants( $dir ) {
+		$this->chDirIfNecessary( $dir );
+
+		$conn = new mysqli("localhost", "root", "", "i2configurator");
+		if ($conn->connect_error) {
+			die("Connection failed: " . $conn->connect_error);
+		}
+		$result = $conn->query("SELECT * FROM i2models");
+		if ($result->num_rows > 1) {
+			die("Error! Multiple ids found for given path.");
+		}
+		$modelid = $result->fetch_object()->id;
+		
+		$result = $conn->query("SELECT * FROM i2variants WHERE `id model` = 1");
+		$variants = $result->fetch_all(MYSQLI_ASSOC);
+		$this->jsonResponse($variants);
+		$conn->close();
 	}
 
 	private function getItemInformation( $name ) {
