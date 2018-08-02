@@ -1029,6 +1029,8 @@ input[name=newpermissions] { padding: 6px 8px; }
 #filetable tbody tr.highlightedItem td:first-child a { outline: none; }
 #filetable tbody tr.selectedItem { background-color: #337ab7; color: #FFF; }
 #filetable tbody tr.selectedItem * a { color: #FFF; }
+#varianttable tbody tr.selectedItem { background-color: #337ab7; color: #FFF; }
+#varianttable tbody tr.selectedItem * a { color: #FFF; }
 #filetable tbody tr td { vertical-align: inherit; }
 
 #navbar { max-width: 100%; }
@@ -1962,9 +1964,10 @@ function IFM( params ) {
 						name: self.i18n.view,
 						onClick: function( data ) {
 							//self.editFile( data.clicked.name );
-							alert("TODO: implement viewing!");
+							alert(JSON.stringify(data));
+							window.location = "editor.html?model="+self.currentDir+"&variant="+data.clicked.name;
 						},
-						iconClass: "icon icon-eye_open",
+						iconClass: "icon icon-search",
 						isShown: function( data ) {
 							return !!( self.config.edit && data.clicked.eaction == "edit" && !data.selected.length );
 						}
@@ -3494,7 +3497,7 @@ f00bar;
 		print '<!DOCTYPE HTML>
 		<html>
 			<head>
-				<title>IFM - improved file manager</title>
+				<title>I2 Configurator - Explorer</title>
 				<meta charset="utf-8">
 				<meta http-equiv="X-UA-Compatible" content="IE=edge">
 				<meta name="viewport" content="width=device-width, initial-scale=1">';
