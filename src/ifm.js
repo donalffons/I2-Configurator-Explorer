@@ -600,9 +600,10 @@ function IFM( params ) {
 						name: self.i18n.view,
 						onClick: function( data ) {
 							//self.editFile( data.clicked.name );
-							alert("TODO: implement viewing!");
+							alert(JSON.stringify(data));
+							window.location = "editor.html?model="+self.currentDir+"&variant="+data.clicked.name;
 						},
-						iconClass: "icon icon-eye_open",
+						iconClass: "icon icon-search",
 						isShown: function( data ) {
 							return !!( self.config.edit && data.clicked.eaction == "edit" && !data.selected.length );
 						}
