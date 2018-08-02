@@ -108,5 +108,7 @@
     "word_wrap": "Word Wrap",
     "variantname": "Variant Name",
     "duplicate": "duplicate",
-    "view": "view"
+    "view": "view",
+    "rename_variant": "Rename Variant",
+    "variant_rename": "Rename umbenennen"
 }

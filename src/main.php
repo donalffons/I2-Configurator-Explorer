@@ -157,6 +157,9 @@ f00bar;
 		$templates['renamefile'] = <<<'f00bar'
 @@@file:src/templates/modal.renamefile.html@@@
 f00bar;
+$templates['renamevariant'] = <<<'f00bar'
+@@@file:src/templates/modal.renamevariant.html@@@
+f00bar;
 		$templates['search'] = <<<'f00bar'
 @@@file:src/templates/modal.search.html@@@
 f00bar;

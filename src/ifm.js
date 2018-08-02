@@ -620,8 +620,8 @@ function IFM( params ) {
 					rename: {
 						name: self.i18n.rename,
 						onClick: function( data ) {
-							//self.showRenameFileDialog( data.clicked.name );
-							alert("TODO: implement renaming!");
+							alert(JSON.stringify(data));
+							self.showRenameVariantDialog(data.clicked);
 						},
 						iconClass: "icon icon-terminal",
 						isShown: function( data ) { return !!( self.config.rename && !data.selected.length && data.clicked.name != ".." ); }
@@ -959,6 +959,33 @@ function IFM( params ) {
 	};
 
 	/**
+	 * Show the rename vaariant dialog
+	 *
+	 * @params variantid - variant id
+	 */
+	this.showRenameVariantDialog = function( variant ) {
+		self.showModal( Mustache.render( self.templates.renamevariant, { variantname: variant.name, i18n: self.i18n } ) );
+		var form = document.forms.formRenameVariant;
+		form.elements.newname.addEventListener( 'keypress', function( e ) {
+			if( e.key == 'Enter' ) {
+				e.preventDefault();
+				self.renameVariant("1", form.elements.newname.value, variant.action);
+				self.hideModal();
+			}
+		});
+		form.addEventListener( 'click', function( e ) {
+			if( e.target.id == 'buttonRename' ) {
+				e.preventDefault();
+				self.renameVariant("1", form.elements.newname.value, variant.action);
+				self.hideModal();
+			} else if( e.target.id == 'buttonCancel' ) {
+				e.preventDefault();
+				self.hideModal();
+			}
+		});
+	};
+
+	/**
 	 * Renames a file
 	 *
 	 * @params string name - name of the file
@@ -981,6 +1008,29 @@ function IFM( params ) {
 						} else ifm.showMessage( self.i18n.file_rename_error +data.message, "e");
 					},
 			error: function() { ifm.showMessage( self.i18n.general_error, "e"); }
+		});
+	};
+
+	/**
+	 * Renames a variant
+	 *
+	 * @params string name - name of the variant
+	 */
+	this.renameVariant = function( id, name, action ) {
+		$.ajax({
+			url: "I2Configurator.php",
+			type: "POST",
+			data: {
+				api: "saveVariant",
+				variantid: id,
+				action: action,
+				name: name
+			},
+			dataType: "json",
+			success: function(){
+			},
+			error: function() { console.error("error while setting variant by ID"); },
+			complete: function() { }
 		});
 	};
 

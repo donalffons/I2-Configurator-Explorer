@@ -108,5 +108,7 @@
     "word_wrap": "Zeilenumbruch",
     "variantname": "Variantenname",
     "duplicate": "Duplizieren",
-    "view": "Betrachten"
+    "view": "Betrachten",
+    "rename_variant": "Variante umbenennen",
+    "variant_rename": "Rename umbenennen"
 }
