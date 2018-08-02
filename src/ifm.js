@@ -422,6 +422,7 @@ function IFM( params ) {
 			return;
 		}
 		data.forEach( function( item ) {
+			item.variantid = item.id;
 			item.guid = self.generateGuid();
 			item.linkname = ( item.name == ".." ) ? "[ up ]" : item.name;
 			if( item.name == ".." )
@@ -599,9 +600,7 @@ function IFM( params ) {
 					view: {
 						name: self.i18n.view,
 						onClick: function( data ) {
-							//self.editFile( data.clicked.name );
-							alert(JSON.stringify(data));
-							window.location = "editor.html?model="+self.currentDir+"&variant="+data.clicked.name;
+							window.location = "viewer.html?variantid="+data.clicked.variantid;
 						},
 						iconClass: "icon icon-search",
 						isShown: function( data ) {
@@ -611,8 +610,7 @@ function IFM( params ) {
 					edit: {
 						name: self.i18n.edit,
 						onClick: function( data ) {
-							//self.editFile( data.clicked.name );
-							alert("TODO: implement editing!");
+							window.location = "editor.html?variantid="+data.clicked.variantid;
 						},
 						iconClass: "icon icon-pencil",
 						isShown: function( data ) {
