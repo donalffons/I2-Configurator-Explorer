@@ -110,5 +110,7 @@
     "duplicate": "duplicate",
     "view": "view",
     "rename_variant": "Rename Variant",
-    "variant_rename": "Rename umbenennen"
+    "variant_rename": "Rename Variant",
+    "new": "New",
+    "new_variant_name": "New Variant Name"
 }
