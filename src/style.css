@@ -41,6 +41,8 @@ input[name=newpermissions] { padding: 6px 8px; }
 #filetable tbody tr.highlightedItem td:first-child a { outline: none; }
 #filetable tbody tr.selectedItem { background-color: #337ab7; color: #FFF; }
 #filetable tbody tr.selectedItem * a { color: #FFF; }
+#varianttable tbody tr.selectedItem { background-color: #337ab7; color: #FFF; }
+#varianttable tbody tr.selectedItem * a { color: #FFF; }
 #filetable tbody tr td { vertical-align: inherit; }
 
 #navbar { max-width: 100%; }
