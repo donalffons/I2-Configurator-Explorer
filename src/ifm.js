@@ -104,14 +104,16 @@ function IFM( params ) {
 		var taskid = self.generateGuid();
 		self.task_add( { id: taskid, name: self.i18n.refresh } );
 		$.ajax({
-			url: self.api,
+			url: "I2Configurator.php",
 			type: "POST",
 			data: {
-				api: "getVariants",
-				dir: self.currentDir
+				api: "getVariantsByPath",
+				path: self.currentDir
 			},
 			dataType: "json",
-			success: self.rebuildVariantTable,
+			success: function(data) {
+				self.rebuildVariantTable(data);
+			},
 			error: function() { self.showMessage( self.i18n.general_error, "e" ); },
 			complete: function() { self.task_done( taskid ); }
 		});
@@ -417,6 +419,9 @@ function IFM( params ) {
 	 * @param object data - object with items
 	 */
 	this.rebuildVariantTable = function( data ) {
+		if(data == "") { // e.g. root directory
+			data = [];
+		}
 		if( data.status == "ERROR" ) {
 			this.showMessage( data.message, "e" );
 			return;
@@ -696,6 +701,7 @@ function IFM( params ) {
 			success: function( data ) {
 				self.currentDir = data.realpath;
 				self.refreshFileTable();
+				self.refreshVariantTable();
 				$( "#currentDir" ).val( self.currentDir );
 				if( config.pushState ) history.pushState( { dir: self.currentDir }, self.currentDir, "#"+encodeURIComponent( self.currentDir ) );
 			},
@@ -2309,8 +2315,8 @@ function IFM( params ) {
 			self.changeDirectory( decodeURIComponent( window.location.hash.substring( 1 ) ) );
 		} else {
 			this.refreshFileTable();
+			this.refreshVariantTable();
 		}
-		this.refreshVariantTable();
 	};
 
 	this.init = function( id ) {
