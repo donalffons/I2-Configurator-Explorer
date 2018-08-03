@@ -643,7 +643,6 @@ function IFM( params ) {
 								return self.i18n.duplicate;
 						},
 						onClick: function( data ) {
-							alert("TODO: implement duplication!");
 							self.duplicateVariants(data.clicked);
 						},
 						iconClass: "icon icon-folder-empty",
@@ -962,7 +961,6 @@ function IFM( params ) {
 			},
 			dataType: "json",
 			success: function(data){
-				alert(JSON.stringify(data));
 			},
 			error: function() { console.error("error while duplicating variant"); },
 			complete: function() { }
@@ -1055,14 +1053,14 @@ function IFM( params ) {
 		form.elements.newname.addEventListener( 'keypress', function( e ) {
 			if( e.key == 'Enter' ) {
 				e.preventDefault();
-				self.renameVariant("1", form.elements.newname.value, variant.action);
+				self.renameVariant(variant.id, form.elements.newname.value, variant.action);
 				self.hideModal();
 			}
 		});
 		form.addEventListener( 'click', function( e ) {
 			if( e.target.id == 'buttonRename' ) {
 				e.preventDefault();
-				self.renameVariant("1", form.elements.newname.value, variant.action);
+				self.renameVariant(variant.id, form.elements.newname.value, variant.action);
 				self.hideModal();
 			} else if( e.target.id == 'buttonCancel' ) {
 				e.preventDefault();
