@@ -160,6 +160,9 @@ f00bar;
 $templates['renamevariant'] = <<<'f00bar'
 @@@file:src/templates/modal.renamevariant.html@@@
 f00bar;
+$templates['newvariant'] = <<<'f00bar'
+@@@file:src/templates/modal.newvariant.html@@@
+f00bar;
 		$templates['search'] = <<<'f00bar'
 @@@file:src/templates/modal.search.html@@@
 f00bar;

@@ -1000,8 +1000,8 @@ function IFM( params ) {
 	 * @params variantid - variant id
 	 */
 	this.showNewVariantDialog = function( variant ) {
-		self.showModal( Mustache.render( self.templates.renamevariant, { variantname: variant.name, i18n: self.i18n } ) );
-		var form = document.forms.formRenameVariant;
+		self.showModal( Mustache.render( self.templates.newvariant, { i18n: self.i18n } ) );
+		var form = document.forms.formNewVariant;
 		form.elements.newname.addEventListener( 'keypress', function( e ) {
 			if( e.key == 'Enter' ) {
 				e.preventDefault();
@@ -1076,7 +1076,6 @@ function IFM( params ) {
 	 * @params string name - name of the variant
 	 */
 	this.newVariant = function( modelid, name, action ) {
-		alert("implement new variant");
 		$.ajax({
 			url: "I2Configurator.php",
 			type: "POST",
@@ -1087,7 +1086,7 @@ function IFM( params ) {
 				name: name
 			},
 			dataType: "json",
-			success: function(){
+			success: function(data){
 			},
 			error: function() { console.error("error while setting variant by ID"); },
 			complete: function() { }
