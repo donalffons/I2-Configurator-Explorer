@@ -961,6 +961,7 @@ function IFM( params ) {
 			},
 			dataType: "json",
 			success: function(data){
+				self.refreshVariantTable();
 			},
 			error: function() { console.error("error while duplicating variant"); },
 			complete: function() { }
@@ -1009,6 +1010,7 @@ function IFM( params ) {
 			},
 			dataType: "json",
 			success: function(data){
+				self.refreshVariantTable();
 			},
 			error: function() { console.error("error while setting variant by ID"); },
 			complete: function() { }
@@ -1139,6 +1141,7 @@ function IFM( params ) {
 			},
 			dataType: "json",
 			success: function(){
+				self.refreshVariantTable();
 			},
 			error: function() { console.error("error while setting variant by ID"); },
 			complete: function() { }
@@ -1162,6 +1165,7 @@ function IFM( params ) {
 			},
 			dataType: "json",
 			success: function(data){
+				self.refreshVariantTable()
 			},
 			error: function() { console.error("error while setting variant by ID"); },
 			complete: function() { }
