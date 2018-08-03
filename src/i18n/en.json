@@ -113,5 +113,7 @@
     "variant_rename": "Rename Variant",
     "new": "New",
     "new_variant_name": "New Variant Name",
-    "variant_delete_confirm": "Do you really want to delete the following variant -"
+    "variant_delete_confirm": "Do you really want to delete the following variant -",
+    "duplicate_variant": "Duplicate Variant",
+    "copy_of": "Copy of"
 }
