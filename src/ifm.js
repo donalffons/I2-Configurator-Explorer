@@ -702,6 +702,11 @@ function IFM( params ) {
 				self.currentDir = data.realpath;
 				self.refreshFileTable();
 				self.refreshVariantTable();
+				if(self.currentDir == "") {
+					$("#variantcontainer").css("display", "none");
+				} else {
+					$("#variantcontainer").css("display", "block");
+				}
 				$( "#currentDir" ).val( self.currentDir );
 				if( config.pushState ) history.pushState( { dir: self.currentDir }, self.currentDir, "#"+encodeURIComponent( self.currentDir ) );
 			},

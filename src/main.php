@@ -26,20 +26,20 @@ class IFM {
 		"selfoverwrite" => 0,
 
 		// api controls
-		"ajaxrequest" => 1,
+		"ajaxrequest" => 0,
 		"chmod" => 1,
 		"copymove" => 1,
-		"createdir" => 1,
-		"createfile" => 1,
+		"createdir" => 0,
+		"createfile" => 0,
 		"edit" => 1,
 		"delete" => 1,
 		"download" => 1,
-		"extract" => 1,
-		"upload" => 1,
-		"remoteupload" => 1,
+		"extract" => 0,
+		"upload" => 0,
+		"remoteupload" => 0,
 		"rename" => 1,
-		"zipnload" => 1,
-		"createarchive" => 1,
+		"zipnload" => 0,
+		"createarchive" => 0,
 
 		// gui controls
 		"showlastmodified" => 0,
