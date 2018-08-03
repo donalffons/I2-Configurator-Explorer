@@ -643,7 +643,11 @@ function IFM( params ) {
 								return self.i18n.duplicate;
 						},
 						onClick: function( data ) {
-							self.duplicateVariants(data.clicked);
+							if( data.selected.length > 0 ) {
+								self.duplicateVariants(data.selected);
+							} else {
+								self.duplicateVariants(data.clicked);
+							}
 						},
 						iconClass: "icon icon-folder-empty",
 						isShown: function( data ) { return !!( self.config.copymove && data.clicked.name != ".." ); }
@@ -656,7 +660,11 @@ function IFM( params ) {
 								return self.i18n.delete;
 						},
 						onClick: function( data ) {
-							self.showDeleteVariantDialog( data.clicked );
+							if( data.selected.length > 0 ) {
+								self.showDeleteVariantDialog( data.selected );
+							} else {
+								self.showDeleteVariantDialog( data.clicked );
+							}
 						},
 						iconClass: "icon icon-trash",
 						isShown: function( data ) { return !!( self.config.delete && data.clicked.name != ".." ); }
@@ -1012,7 +1020,7 @@ function IFM( params ) {
 			success: function(data){
 				self.refreshVariantTable();
 			},
-			error: function() { console.error("error while setting variant by ID"); },
+			error: function() { console.error("error while deleting variant by ID"); },
 			complete: function() { }
 		});
 	};
