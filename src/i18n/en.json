@@ -115,5 +115,6 @@
     "new_variant_name": "New Variant Name",
     "variant_delete_confirm": "Do you really want to delete the following variant -",
     "duplicate_variant": "Duplicate Variant",
-    "copy_of": "Copy of"
+    "copy_of": "Copy of",
+    "create_new_variant": "Create New Variant"
 }

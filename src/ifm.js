@@ -2188,6 +2188,23 @@ function IFM( params ) {
 				});
 
 		// bind static buttons
+		document.getElementById( 'buttonNewVariant' ).onclick = function() {
+			$.ajax({
+				url: "I2Configurator.php",
+				type: "POST",
+				data: {
+					api: "getModelByPath",
+					path: self.currentDir,
+				},
+				dataType: "json",
+				success: function(data){
+					var fakevariant = {"id model": data.id};
+					self.showNewVariantDialog(fakevariant);
+				},
+				error: function() { console.error("error while duplicating variant"); },
+				complete: function() { }
+			});
+		};
 		document.getElementById( 'refresh' ).onclick = function() { self.refreshFileTable(); };
 		document.getElementById( 'search' ).onclick = function() { self.showSearchDialog(); };
 		if( self.config.createfile )

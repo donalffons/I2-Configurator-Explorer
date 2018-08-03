@@ -115,5 +115,6 @@
     "new_variant_name": "Name der neuen Variante",
     "variant_delete_confirm": "Soll die folgende Variante wirklich gelöscht werden:",
     "duplicate_variant": "Variante Duplizieren",
-    "copy_of": "Kopie von"
+    "copy_of": "Kopie von",
+    "create_new_variant": "Neue Variante Erstellen"
 }
