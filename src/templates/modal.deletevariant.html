@@ -1,0 +1,14 @@
+<form id="formDeleteVariants">
+<div class="modal-body">
+	{{#multiple}}
+	<label>{{i18n.variant_delete_confirm}} <code>{{count}}</code>?</label>
+	{{/multiple}}
+	{{^multiple}}
+	<label>{{i18n.variant_delete_confirm}} <code>{{variantname}}</code>?</label>
+	{{/multiple}}
+</div>
+<div class="modal-footer">
+	<button type="button" class="btn btn-danger" id="buttonYes">{{i18n.delete}}</button>
+	<button type="button" class="btn btn-default" id="buttonNo">{{i18n.cancel}}</button>
+</div>
+</form>

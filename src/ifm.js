@@ -656,7 +656,7 @@ function IFM( params ) {
 								return self.i18n.delete;
 						},
 						onClick: function( data ) {
-							alert("TODO: implement delete!");
+							self.showDeleteVariantDialog( data.clicked );
 						},
 						iconClass: "icon icon-trash",
 						isShown: function( data ) { return !!( self.config.delete && data.clicked.name != ".." ); }
@@ -937,6 +937,54 @@ function IFM( params ) {
 						} else self.showMessage( self.i18n.file_delete_error, "e" );
 					},
 			error: function() { self.showMessage( self.i18n.general_error, "e" ); }
+		});
+	};
+
+	/**
+	 * Shows the delete variant dialog
+	 */
+	this.showDeleteVariantDialog = function( items ) {
+		self.showModal(	Mustache.render( self.templates.deletevariant, {
+			multiple: ( items.length > 1 ),
+			count: items.length,
+			variantname: ( Array.isArray( items ) ? items[0].name : items.name ),
+			i18n: self.i18n
+		}));
+		var form = document.forms.formDeleteVariants;
+		form.addEventListener( 'click', function( e ) {
+			if( e.target.id == 'buttonYes' ) {
+				e.preventDefault();
+				self.deleteVariants( items );
+				self.hideModal();
+			} else if( e.target.id == 'buttonNo' ) {
+				e.preventDefault();
+				self.hideModal();
+			}
+		});
+	};
+
+	/**
+	 * Deletes variants
+	 *
+	 * @params {array} items - array with objects from the variantCache
+	 */
+	this.deleteVariants = function( items ) {
+		if( ! Array.isArray( items ) )
+			items = [items];
+		var ids = [];
+		items.forEach(function(e) {ids.push(e.id);})
+		$.ajax({
+			url: "I2Configurator.php",
+			type: "POST",
+			data: {
+				api: "deleteVariantByID",
+				variantid: ids
+			},
+			dataType: "json",
+			success: function(data){
+			},
+			error: function() { console.error("error while setting variant by ID"); },
+			complete: function() { }
 		});
 	};
 

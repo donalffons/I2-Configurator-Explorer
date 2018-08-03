@@ -112,5 +112,6 @@
     "rename_variant": "Rename Variant",
     "variant_rename": "Rename Variant",
     "new": "New",
-    "new_variant_name": "New Variant Name"
+    "new_variant_name": "New Variant Name",
+    "variant_delete_confirm": "Do you really want to delete the following variant -"
 }

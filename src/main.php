@@ -142,6 +142,9 @@ f00bar;
 		$templates['deletefile'] = <<<'f00bar'
 @@@file:src/templates/modal.deletefile.html@@@
 f00bar;
+$templates['deletevariant'] = <<<'f00bar'
+@@@file:src/templates/modal.deletevariant.html@@@
+f00bar;
 		$templates['extractfile'] = <<<'f00bar'
 @@@file:src/templates/modal.extractfile.html@@@
 f00bar;
