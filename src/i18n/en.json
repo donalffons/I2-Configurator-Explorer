@@ -116,5 +116,7 @@
     "variant_delete_confirm": "Do you really want to delete the following variant -",
     "duplicate_variant": "Duplicate Variant",
     "copy_of": "Copy of",
-    "create_new_variant": "Create New Variant"
+    "create_new_variant": "Create New Variant",
+    "create_new_model": "Create New Model",
+    "filetype_not_allowed": "File type not allowed"
 }

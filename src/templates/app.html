@@ -31,9 +31,9 @@
 						{{#config.createfile}}
 						<li><a id="createFile"><span title="{{i18n.file_new}}" class="icon icon-doc-inv"></span> <span class="visible-xs">{{i18n.file_new}}</span></a></li>
 						{{/config.createfile}}
-						{{#config.createdir}}
+						<!--{{#config.createdir}}
 						<li><a id="createDir"><span title="{{i18n.folder_new}}" class="icon icon-folder"></span> <span class="visible-xs">{{i18n.folder_new}}</span></a></li>
-						{{/config.createdir}}
+						{{/config.createdir}}-->
 						<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="icon icon-down-open"></span></a>
 							<ul class="dropdown-menu" role="menu">
 								{{#config.remoteupload}}
@@ -84,6 +84,11 @@
 				<tbody>
 				</tbody>
 			</table>
+			<div class="container" id="modeltoolscontainer">
+				<button type="button" class="btn btn-default" id="buttonNewModel">
+					<span class="icon icon-plus"></span>{{i18n.create_new_model}}
+				</button>
+			</div>
 		</div>
 		<div class="container" id="variantcontainer" style="display:none">
 			<table id="varianttable" class="table">
