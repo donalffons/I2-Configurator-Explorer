@@ -975,8 +975,29 @@ function IFM( params ) {
 			dataType: "json",
 			success: function( data ) {
 						if( data.status == "OK" ) {
-							self.showMessage( self.i18n.file_delete_success, "s" );
-							self.refreshFileTable();
+							if(self.currentDir == "") {
+								var paths = [];
+								for(var d in items) {
+									paths.push(items[d].name);
+								}
+								$.ajax({
+									url: "I2Configurator.php",
+									type: "POST",
+									data: {
+										api: "deleteModelsByPath",
+										paths: paths,
+									},
+									dataType: "json",
+									success: function(data){
+										self.showMessage( self.i18n.file_delete_success +"<br/>"+self.i18n.model_delete_success, "s" );
+										self.refreshFileTable();},
+									error: function() { console.error("error while duplicating variant"); },
+									complete: function() { }
+								});
+							} else {
+								self.showMessage( self.i18n.file_delete_success, "s" );
+								self.refreshFileTable();
+							}
 						} else self.showMessage( self.i18n.file_delete_error, "e" );
 					},
 			error: function() { self.showMessage( self.i18n.general_error, "e" ); }

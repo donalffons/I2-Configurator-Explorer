@@ -118,5 +118,6 @@
     "copy_of": "Kopie von",
     "create_new_variant": "Neue Variante erstellen",
     "create_new_model": "Neues Modell erstellen",
-    "filetype_not_allowed": "Dateityp nicht erlaubt"
+    "filetype_not_allowed": "Dateityp nicht erlaubt",
+    "model_delete_success": "Modell erfolgreich gelöscht"
 }
