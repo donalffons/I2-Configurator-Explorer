@@ -110,7 +110,7 @@ function IFM( params ) {
 		var taskid = self.generateGuid();
 		self.task_add( { id: taskid, name: self.i18n.refresh } );
 		$.ajax({
-			url: "I2Configurator.php",
+			url: "i2database.php",
 			type: "POST",
 			data: {
 				api: "getVariantsByPath",
@@ -898,7 +898,7 @@ function IFM( params ) {
 	 */
 	this.createDir = function( dirname ) {
 		$.ajax({
-			url: "I2Configurator.php",
+			url: "i2database.php",
 			type: "POST",
 			data: {
 				api: "newModel",
@@ -981,7 +981,7 @@ function IFM( params ) {
 									paths.push(items[d].name);
 								}
 								$.ajax({
-									url: "I2Configurator.php",
+									url: "i2database.php",
 									type: "POST",
 									data: {
 										api: "deleteModelsByPath",
@@ -1015,7 +1015,7 @@ function IFM( params ) {
 		var ids = [];
 		items.forEach(function(e) {ids.push(e.id);})
 		$.ajax({
-			url: "I2Configurator.php",
+			url: "i2database.php",
 			type: "POST",
 			data: {
 				api: "duplicateVariants",
@@ -1066,7 +1066,7 @@ function IFM( params ) {
 		var ids = [];
 		items.forEach(function(e) {ids.push(e.id);})
 		$.ajax({
-			url: "I2Configurator.php",
+			url: "i2database.php",
 			type: "POST",
 			data: {
 				api: "deleteVariantsByIDs",
@@ -1195,7 +1195,7 @@ function IFM( params ) {
 	 */
 	this.renameVariant = function( id, name, action ) {
 		$.ajax({
-			url: "I2Configurator.php",
+			url: "i2database.php",
 			type: "POST",
 			data: {
 				api: "saveVariant",
@@ -1219,7 +1219,7 @@ function IFM( params ) {
 	 */
 	this.newVariant = function( modelid, name, action ) {
 		$.ajax({
-			url: "I2Configurator.php",
+			url: "i2database.php",
 			type: "POST",
 			data: {
 				api: "newVariant",
@@ -2240,7 +2240,7 @@ function IFM( params ) {
 		// bind static buttons
 		document.getElementById( 'buttonNewVariant' ).onclick = function() {
 			$.ajax({
-				url: "I2Configurator.php",
+				url: "i2database.php",
 				type: "POST",
 				data: {
 					api: "getModelByPath",
