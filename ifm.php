@@ -2314,20 +2314,12 @@ function IFM( params ) {
 								for(var d in items) {
 									paths.push(items[d].name);
 								}
-								$.ajax({
-									url: "i2database.php",
-									type: "POST",
-									data: {
-										api: "deleteModelsByPath",
-										paths: paths,
-									},
-									dataType: "json",
-									success: function(data){
-										self.showMessage( self.i18n.file_delete_success +"<br/>"+self.i18n.model_delete_success, "s" );
-										self.refreshFileTable();},
-									error: function() { console.error("error while duplicating variant"); },
-									complete: function() { }
-								});
+								paths.forEach(async (p) => {
+									let delModel = await i2ModelBuilder.getModelByPath(p);
+									await delModel.delete();
+									self.showMessage( self.i18n.model_delete_success, "s" );
+									self.refreshFileTable();
+								})
 							} else {
 								self.showMessage( self.i18n.file_delete_success, "s" );
 								self.refreshFileTable();
