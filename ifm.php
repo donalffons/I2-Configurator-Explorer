@@ -2445,14 +2445,14 @@ function IFM( params ) {
 		form.elements.newname.addEventListener( 'keypress', function( e ) {
 			if( e.key == 'Enter' ) {
 				e.preventDefault();
-				self.renameVariant(variant.id, form.elements.newname.value, variant.action);
+				self.renameVariant(variant, form.elements.newname.value);
 				self.hideModal();
 			}
 		});
 		form.addEventListener( 'click', function( e ) {
 			if( e.target.id == 'buttonRename' ) {
 				e.preventDefault();
-				self.renameVariant(variant.id, form.elements.newname.value, variant.action);
+				self.renameVariant(variant, form.elements.newname.value);
 				self.hideModal();
 			} else if( e.target.id == 'buttonCancel' ) {
 				e.preventDefault();
@@ -2522,23 +2522,10 @@ function IFM( params ) {
 	 *
 	 * @params string name - name of the variant
 	 */
-	this.renameVariant = function( id, name, action ) {
-		$.ajax({
-			url: "i2database.php",
-			type: "POST",
-			data: {
-				api: "saveVariant",
-				variantid: id,
-				action: action,
-				name: name
-			},
-			dataType: "json",
-			success: function(){
-				self.refreshVariantTable();
-			},
-			error: function() { console.error("error saving variant"); },
-			complete: function() { }
-		});
+	this.renameVariant = async function( variant, name ) {
+		variant.setName(name);
+		await variant.save();
+		self.refreshVariantTable();
 	};
 
 	/**
