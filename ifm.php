@@ -1543,11 +1543,13 @@ function IFM( params ) {
 		self.task_add( { id: taskid, name: self.i18n.refresh } );
 		let currentModelPromise = i2ModelBuilder.getModelByPath(self.currentDir);
 		currentModelPromise.then(async (currentModel) => {
-			let variants = await currentModel.getVariants();
-	
-			self.rebuildVariantTable(variants);
-			self.task_done( taskid );
-		}, (e) => {
+			let variantsPromise = currentModel.getVariants();
+			variantsPromise.then((variants) => {
+				self.rebuildVariantTable(variants);
+			}, () => {
+				self.rebuildVariantTable([]);
+			});
+		}).then(() => {
 			self.task_done( taskid );
 		});
 	};
