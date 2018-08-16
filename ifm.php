@@ -49,7 +49,8 @@ class IFM {
 		"showhtdocs" => 0,
 		"showhiddenfiles" => 0,
 		"showpath" => 0,
-		"contextmenu" => 1
+		"contextmenu" => 1,
+		"disable_mime_detection" => 0
 	);
 
 	private $config = array();
@@ -1609,11 +1610,14 @@ function IFM( params ) {
 				} else if(
 					self.config.edit &&
 					(
-						typeof item.mime_type === "string" && (
-							item.mime_type.substr( 0, 4 ) == "text"
-							|| item.mime_type == "inode/x-empty"
-							|| item.mime_type.indexOf( "xml" ) != -1
-							|| item.mime_type.indexOf( "json" ) != -1
+						self.config.disable_mime_detection ||
+						(
+							typeof item.mime_type === "string" && (
+								item.mime_type.substr( 0, 4 ) == "text"
+								|| item.mime_type == "inode/x-empty"
+								|| item.mime_type.indexOf( "xml" ) != -1
+								|| item.mime_type.indexOf( "json" ) != -1
+							)
 						)
 					)
 				) {
@@ -2239,7 +2243,7 @@ function IFM( params ) {
 		self.editor.getSession().setValue(content);
 		self.editor.focus();
 		self.editor.on("change", function() { self.fileChanged = true; });
-		if( self.inArray( "ext-modelist", self.ace.files ) ) {
+		if( self.ace && self.inArray( "ext-modelist", self.ace.files ) ) {
 			var mode = ace.require( "ace/ext/modelist" ).getModeForPath( filename ).mode;
 			if( self.inArray( mode, self.ace.modes.map( x => "ace/mode/"+x ) ) )
 				self.editor.getSession().setMode( mode );
@@ -3980,7 +3984,8 @@ f00bar;
 				$type = substr( strrchr( $name, "." ), 1 );
 			$item["icon"] = $this->getTypeIcon( $type );
 			$item["ext"] = strtolower($type);
-			$item["mime_type"] = mime_content_type( $name );
+			if( !$this->config['disable_mime_detection'] )
+				$item["mime_type"] = mime_content_type( $name );
 		}
 		if( $this->config['showlastmodified'] == 1 ) { $item["lastmodified"] = date( "d.m.Y, G:i e", filemtime( $name ) ); }
 		if( $this->config['showfilesize'] == 1 ) {
