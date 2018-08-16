@@ -945,24 +945,12 @@ function IFM( params ) {
 	 *
 	 * @params {array} items - array with objects from the variantCache
 	 */
-	this.deleteVariants = function( items ) {
-		if( ! Array.isArray( items ) )
-			items = [items];
-		var ids = [];
-		items.forEach(function(e) {ids.push(e.id);})
-		$.ajax({
-			url: "i2database.php",
-			type: "POST",
-			data: {
-				api: "deleteVariantsByIDs",
-				variantid: ids
-			},
-			dataType: "json",
-			success: function(data){
-				self.refreshVariantTable();
-			},
-			error: function() { console.error("error while deleting variant by ID"); },
-			complete: function() { }
+	this.deleteVariants = function( variants ) {
+		if( ! Array.isArray( variants ) )
+			variants = [variants];
+		variants.forEach(async(variant) => {
+			await variant.delete();
+			self.refreshVariantTable();
 		});
 	};
 
