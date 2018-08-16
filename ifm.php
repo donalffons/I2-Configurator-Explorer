@@ -2335,26 +2335,17 @@ function IFM( params ) {
 	 *
 	 * @params {array} items - array with objects from the variantCache
 	 */
-	this.duplicateVariants = function( items ) {
-		if( ! Array.isArray( items ) )
-			items = [items];
-		var ids = [];
-		items.forEach(function(e) {ids.push(e.id);})
-		$.ajax({
-			url: "i2database.php",
-			type: "POST",
-			data: {
-				api: "duplicateVariants",
-				variantid: ids,
-				prefix: self.i18n.copy_of + " ",
-				postfix: ""
-			},
-			dataType: "json",
-			success: function(data){
-				self.refreshVariantTable();
-			},
-			error: function() { console.error("error while duplicating variant"); },
-			complete: function() { }
+	this.duplicateVariants = function( variants ) {
+		if( ! Array.isArray( variants ) )
+			variants = [variants];
+		variants.forEach(async(variant) => {
+			let newVariant = await i2VariantBuilder.createNewVariant();
+			let newVariantID = newVariant.getID();
+			newVariant.data = variant.data;
+			newVariant.setID(newVariantID);
+			newVariant.setName(newVariant.getName() + " - copy");
+			newVariant.save();
+			self.refreshVariantTable();
 		});
 	};
 
