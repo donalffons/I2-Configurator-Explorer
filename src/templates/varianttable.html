@@ -1,5 +1,5 @@
 {{#items}}
-<tr class="clickable-variant-row {{rowclasses}}" {{{dragdrop}}} data-id="{{guid}}" data-filename="{{name}}" data-eaction="{{eaction}}">
+<tr class="clickable-variant-row {{rowclasses}}" {{{dragdrop}}} data-id="{{guid}}" data-variantname="{{data.name}}" data-eaction="{{eaction}}">
 	{{#fixtop}}
 	<td data-order="{{fixtop}}"></td>
 	{{/fixtop}}
@@ -9,7 +9,7 @@
 	<td>
 		<a {{{href}}} tabindex="0" id="{{guid}}" class="ifmitem" {{{tooltip}}} data-type="{{type}}">
 			<span class="{{icon}}"></span>
-			{{name}}
+			{{data.name}}
 		</a>
 	</td>
 </tr>
