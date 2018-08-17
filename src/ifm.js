@@ -117,7 +117,7 @@ function IFM( params ) {
 			}, () => {
 				self.rebuildVariantTable([]);
 			});
-		}).then(() => {
+		}, ()=>{}).then(() => {
 			self.task_done( taskid );
 		});
 	};
