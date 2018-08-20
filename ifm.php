@@ -4557,7 +4557,7 @@ f00bar;
 		elseif( $this->isAbsolutePath( $this->config['root_dir'] ) )
 			return realpath( $this->config['root_dir'] );
 		else
-			return realpath( $this->pathCombine( $this->getScriptRoot(), $this->config['root_dir'] ) );
+			return realpath( $this->pathCombine( realpath($this->getScriptRoot() . "/../"), realpath($this->config['root_dir'] )));
 	}
 
 	private function getScriptRoot() {
