@@ -17,7 +17,7 @@ class IFM {
 		// general config
 		"auth" => 0,
 		"auth_source" => 'inline;admin:$2y$10$0Bnm5L4wKFHRxJgNq.oZv.v7yXhkJZQvinJYR2p6X1zPvzyDRUVRC',
-		"root_dir" => "WebGL Models/",
+		"root_dir" => "../WebGL Models/",
 		"tmp_dir" => "",
 		"defaulttimezone" => "Europe/Berlin",
 		"forbiddenChars" => array(),
@@ -1971,7 +1971,7 @@ function IFM( params ) {
 						name: self.i18n.view,
 						onClick: async function( data ) {
 							let currModel = await i2ModelBuilder.getModelByPath(self.currentDir);
-							window.location = "editor.html?variantid="+data.clicked.variantid+"&modelid="+currModel.getID();
+							window.location = "i2ConfiguratorEditorViewer/viewer.html?variantid="+data.clicked.variantid+"&modelid="+currModel.getID();
 						},
 						iconClass: "icon icon-search"
 					},
@@ -1986,7 +1986,7 @@ function IFM( params ) {
 						name: self.i18n.edit,
 						onClick: async function( data ) {
 							let currModel = await i2ModelBuilder.getModelByPath(self.currentDir);
-							window.location = "editor.html?variantid="+data.clicked.variantid+"&modelid="+currModel.getID();
+							window.location = "i2ConfiguratorEditorViewer/editor.html?variantid="+data.clicked.variantid+"&modelid="+currModel.getID();
 						},
 						iconClass: "icon icon-pencil"
 					},
@@ -4557,7 +4557,7 @@ f00bar;
 		elseif( $this->isAbsolutePath( $this->config['root_dir'] ) )
 			return realpath( $this->config['root_dir'] );
 		else
-			return realpath( $this->pathCombine( realpath($this->getScriptRoot() . "/../"), realpath($this->config['root_dir'] )));
+			return realpath( $this->pathCombine( $this->getScriptRoot(), $this->config['root_dir'] ) );
 	}
 
 	private function getScriptRoot() {

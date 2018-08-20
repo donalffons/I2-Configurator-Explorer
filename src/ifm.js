@@ -539,7 +539,7 @@ function IFM( params ) {
 						name: self.i18n.view,
 						onClick: async function( data ) {
 							let currModel = await i2ModelBuilder.getModelByPath(self.currentDir);
-							window.location = "editor.html?variantid="+data.clicked.variantid+"&modelid="+currModel.getID();
+							window.location = "i2ConfiguratorEditorViewer/viewer.html?variantid="+data.clicked.variantid+"&modelid="+currModel.getID();
 						},
 						iconClass: "icon icon-search"
 					},
@@ -554,7 +554,7 @@ function IFM( params ) {
 						name: self.i18n.edit,
 						onClick: async function( data ) {
 							let currModel = await i2ModelBuilder.getModelByPath(self.currentDir);
-							window.location = "editor.html?variantid="+data.clicked.variantid+"&modelid="+currModel.getID();
+							window.location = "i2ConfiguratorEditorViewer/editor.html?variantid="+data.clicked.variantid+"&modelid="+currModel.getID();
 						},
 						iconClass: "icon icon-pencil"
 					},

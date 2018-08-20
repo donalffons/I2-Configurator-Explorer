@@ -18,7 +18,7 @@ class IFM {
 		// general config
 		"auth" => 0,
 		"auth_source" => 'inline;admin:$2y$10$0Bnm5L4wKFHRxJgNq.oZv.v7yXhkJZQvinJYR2p6X1zPvzyDRUVRC',
-		"root_dir" => "WebGL Models/",
+		"root_dir" => "../WebGL Models/",
 		"tmp_dir" => "",
 		"defaulttimezone" => "Europe/Berlin",
 		"forbiddenChars" => array(),
@@ -1115,7 +1115,7 @@ f00bar;
 		elseif( $this->isAbsolutePath( $this->config['root_dir'] ) )
 			return realpath( $this->config['root_dir'] );
 		else
-			return realpath( $this->pathCombine( realpath($this->getScriptRoot() . "/../"), realpath($this->config['root_dir'] )));
+			return realpath( $this->pathCombine( $this->getScriptRoot(), $this->config['root_dir'] ) );
 	}
 
 	private function getScriptRoot() {
