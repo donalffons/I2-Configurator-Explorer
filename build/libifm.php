@@ -1538,20 +1538,19 @@ function IFM( params ) {
 	/**
 	 * Refreshes the file table
 	 */
-	this.refreshVariantTable = function () {
+	this.refreshVariantTable = async function () {
 		var taskid = self.generateGuid();
 		self.task_add( { id: taskid, name: self.i18n.refresh } );
-		let currentModelPromise = i2ModelBuilder.getModelByPath(self.currentDir);
-		currentModelPromise.then(async (currentModel) => {
-			let variantsPromise = currentModel.getVariants();
-			variantsPromise.then((variants) => {
+		let currentModel = await i2ModelBuilder.getModelByPath(self.currentDir);
+		if(currentModel !== undefined) {
+			let variants = await currentModel.getVariants();
+			if(variants !== undefined) {
 				self.rebuildVariantTable(variants);
-			}, () => {
+			} else {
 				self.rebuildVariantTable([]);
-			});
-		}, ()=>{}).then(() => {
-			self.task_done( taskid );
-		});
+			}
+		}
+		self.task_done( taskid );
 	};
 
 	/**
@@ -2345,9 +2344,18 @@ function IFM( params ) {
 		variants.forEach(async(variant) => {
 			let newVariant = await i2VariantBuilder.createNewVariant();
 			let newVariantID = newVariant.getID();
-			newVariant.data = variant.data;
+			newVariant.setDataClone(variant.getData());
 			newVariant.setID(newVariantID);
 			newVariant.setName(newVariant.getName() + " - copy");
+
+			let actions = await variant.getActions();
+			if(actions !== undefined) {
+				actions.forEach((action) => {
+					action.addVariantID(newVariant.getID());
+					action.save();
+				});
+			}
+
 			newVariant.save();
 			self.refreshVariantTable();
 		});
