@@ -1055,7 +1055,13 @@ function IFM( params ) {
 	 *
 	 * @params string name - name of the file
 	 */
-	this.renameFile = function( filename, newname ) {
+	this.renameFile = async function( filename, newname ) {
+		let currentModel = await i2ModelBuilder.getModelByPath(filename);
+		if(self.currentDir == "" && currentModel !== undefined) {
+			currentModel.setName(newname);
+			await currentModel.save();
+			newname = currentModel.getPath();
+		}
 		$.ajax({
 			url: ifm.api,
 			type: "POST",
