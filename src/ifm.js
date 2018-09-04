@@ -423,10 +423,12 @@ function IFM( params ) {
 	 *
 	 * @param object data - object with items
 	 */
-	this.rebuildVariantTable = function( variants ) {
+	this.rebuildVariantTable = async function( variants ) {
+		let currModel = await i2ModelBuilder.getModelByPath(self.currentDir);
 		variants.forEach( function( item ) {
 			item.variantid = item.data.id;
 			item.guid = self.generateGuid();
+			item.href = 'href="i2ConfiguratorEditorViewer/editor.html?variantid='+item.variantid+'&modelid='+currModel.getID()+'"';
 		});
 
 		// save items to file cache
@@ -463,7 +465,7 @@ function IFM( params ) {
 			if( e.target.tagName == "TD" && e.target.parentElement.classList.contains( 'clickable-variant-row' ) && e.target.parentElement.dataset.filename !== ".." && e.ctrlKey )
 				e.target.parentElement.classList.toggle( 'selectedItem' );
 			else if( e.target.classList.contains( 'ifmitem' ) || e.target.parentElement.classList.contains( 'ifmitem' ) ) {
-				e.stopPropagation();
+				/*e.stopPropagation();
 				e.preventDefault();
 				ifmitem = ( e.target.classList.contains( 'ifmitem' ) ? e.target : e.target.parentElement );
 				if( ifmitem.dataset.type == "dir" )
@@ -472,7 +474,7 @@ function IFM( params ) {
 					if( self.config.isDocroot )
 						window.location.href = self.hrefEncode( self.pathCombine( self.currentDir, ifmitem.parentElement.parentElement.dataset.filename ) );
 					else
-						document.forms["d_"+ifmitem.id].submit();
+						document.forms["d_"+ifmitem.id].submit();*/
 			} else if( e.target.parentElement.name == 'start_download' ) {
 				e.stopPropagation();
 				e.preventDefault();
